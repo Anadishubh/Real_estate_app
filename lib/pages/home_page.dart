@@ -1,10 +1,9 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nestsuche2/Constant/color_constant.dart';
+import 'package:nestsuche2/Controller/home_page_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,26 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const List<String> _list = [
-    'New House',
-    'Homes',
-    'Offices',
-    'Commercial property',
-    'Garages',
-    'Land',
-    'Storage rooms',
-    'Buildings',
-  ];
-
-  String? selectedItem;
-  bool isBuySelected = true;
-
-  void onChanged(String? value) {
-    setState(() {
-      selectedItem = value;
-    });
-  }
-
+  final HomePageController controller = Get.put(HomePageController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,74 +55,73 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                setState(
-                                  () {
-                                    isBuySelected = true;
-                                  },
-                                );
+                                controller.toggleBuyRent(true);
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: isBuySelected
-                                        ? AppColors.primaryColor
-                                            .withOpacity(0.5)
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: AppColors.primaryColor)),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                child: Center(
-                                  child: Text(
-                                    'Buy',
-                                    style: GoogleFonts.libreBaskerville(
-                                      textStyle: TextStyle(
-                                          color: isBuySelected
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                              child: Obx(() {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: controller.isBuySelected.value
+                                          ? AppColors.primaryColor
+                                              .withOpacity(0.5)
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                          color: AppColors.primaryColor)),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
+                                  child: Center(
+                                    child: Text(
+                                      'Buy',
+                                      style: GoogleFonts.libreBaskerville(
+                                        textStyle: TextStyle(
+                                            color:
+                                                controller.isBuySelected.value
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             ),
                           ),
                           const SizedBox(width: 0.5),
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                setState(
-                                  () {
-                                    isBuySelected = false;
-                                  },
-                                );
+                                controller.toggleBuyRent(false);
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: isBuySelected
-                                      ? Colors.white
-                                      : AppColors.primaryColor.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(5),
-                                  border:
-                                      Border.all(color: AppColors.primaryColor),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                child: Center(
-                                  child: Text(
-                                    'Rent',
-                                    style: GoogleFonts.libreBaskerville(
-                                      textStyle: TextStyle(
-                                          color: isBuySelected
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                              child: Obx(() {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: controller.isBuySelected.value
+                                        ? Colors.white
+                                        : AppColors.primaryColor
+                                            .withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        color: AppColors.primaryColor),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
+                                  child: Center(
+                                    child: Text(
+                                      'Rent',
+                                      style: GoogleFonts.libreBaskerville(
+                                        textStyle: TextStyle(
+                                            color:
+                                                controller.isBuySelected.value
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             ),
                           ),
                         ],
@@ -159,23 +138,19 @@ class _HomePageState extends State<HomePage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 50.0),
                               child: CustomDropdown<String>(
-                                decoration: const CustomDropdownDecoration(
-                                  expandedFillColor:
-                                      AppColors.primaryColorlight,
-                                  listItemDecoration: ListItemDecoration(
-                                    selectedColor: Colors.white,
-                                    splashColor: Colors.white,
+                                  decoration: const CustomDropdownDecoration(
+                                    expandedFillColor:
+                                        AppColors.primaryColorlight,
+                                    listItemDecoration: ListItemDecoration(
+                                      selectedColor: Colors.white,
+                                      splashColor: Colors.white,
+                                    ),
+                                    listItemStyle:
+                                        TextStyle(color: Colors.white),
                                   ),
-                                  listItemStyle: TextStyle(color: Colors.white),
-                                ),
-                                hintText: 'Property type',
-                                items: _list,
-                                onChanged: (value) {
-                                  if (kDebugMode) {
-                                    print('changing value to: $value');
-                                  }
-                                },
-                              ),
+                                  hintText: 'Property type',
+                                  items: HomePageController.propertyTypes,
+                                  onChanged: controller.selectedItem.call),
                             ),
                             const SizedBox(height: 20),
                             SizedBox(

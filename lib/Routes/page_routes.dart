@@ -24,7 +24,7 @@ class AppRoutes {
     ),
     GetPage(
       name: language,
-      page: () => const LanguageScreen(),
+      page: () =>  LanguageScreen(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
     ),

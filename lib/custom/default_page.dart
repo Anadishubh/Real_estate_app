@@ -5,55 +5,13 @@ import 'package:nestsuche2/Constant/color_constant.dart';
 import 'package:nestsuche2/custom/language_selection.dart';
 import 'package:nestsuche2/custom/region_selection.dart';
 import 'package:nestsuche2/custom/thanks_page.dart';
-
+import '../Controller/default_controller.dart';
 import '../Localization/locales.dart';
 
-class LanguageScreen extends StatefulWidget {
-  const LanguageScreen({super.key});
+class LanguageScreen extends StatelessWidget {
+  LanguageScreen({super.key});
 
-  @override
-  LanguageScreenState createState() => LanguageScreenState();
-}
-
-class LanguageScreenState extends State<LanguageScreen> {
-  final PageController _pageController = PageController();
-  int _currentIndex = 0;
-
-  void _onNext() {
-    if (_currentIndex < 2) {
-      setState(
-        () {
-          _currentIndex++;
-        },
-      );
-      _pageController.animateToPage(
-        _currentIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      // Navigate to login page
-      Get.offAndToNamed('/login'); // Using GetX for navigation
-    }
-  }
-
-  void _onBack() {
-    if (_currentIndex > 0) {
-      setState(
-        () {
-          _currentIndex--;
-        },
-      );
-      _pageController.animateToPage(
-        _currentIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      Get.back();
-    }
-  }
-
+  final LanguageScreenController controller = Get.put(LanguageScreenController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +47,9 @@ class LanguageScreenState extends State<LanguageScreen> {
                     width: double.infinity,
                     child: PageView(
                       physics: const NeverScrollableScrollPhysics(),
-                      controller: _pageController,
+                      controller: controller.pageController,
                       onPageChanged: (index) {
-                        setState(
-                          () {
-                            _currentIndex = index;
-                          },
-                        );
+                        controller.currentIndex.value = index;
                       },
                       children: const [
                         LanguageSelection(),
@@ -111,13 +65,36 @@ class LanguageScreenState extends State<LanguageScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(left: 5.0,right: 27,bottom: 15),
-              child: Row(
-                children: [
-                  if (_currentIndex > 0)
+              padding: const EdgeInsets.only(left: 5.0, right: 27, bottom: 15),
+              child: Obx(
+                    () => Row(
+                  children: [
+                    if (controller.currentIndex.value > 0)
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.buttonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            onPressed: controller.onBack,
+                            child: const Text(
+                              'Back',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppColors.textSubHeadingColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 10.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.buttonColor,
@@ -125,10 +102,12 @@ class LanguageScreenState extends State<LanguageScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          onPressed: _onBack,
-                          child: const Text(
-                            'Back',
-                            style: TextStyle(
+                          onPressed: controller.onNext,
+                          child: Text(
+                            controller.currentIndex.value == 2
+                                ? 'Finish'
+                                : LocaleData.button.getString(context),
+                            style: const TextStyle(
                               fontSize: 18,
                               color: AppColors.textSubHeadingColor,
                             ),
@@ -136,31 +115,8 @@ class LanguageScreenState extends State<LanguageScreen> {
                         ),
                       ),
                     ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        onPressed: _onNext,
-                        child: Text(
-                          _currentIndex == 2
-                              ? 'Finish'
-                              : LocaleData.button.getString(context),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: AppColors.textSubHeadingColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
