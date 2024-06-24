@@ -3,6 +3,9 @@
 A new Flutter project.
 
 ## Getting Started
+Sample images.
+
+![Simulator Screenshot - iPhone 15 - 2024-06-24 at 14 52 19](https://github.com/Anadishubh/Real_estate_app/assets/61245240/757e06ce-9286-4bc9-b811-1728bcdbadb6)
 
 This project is a starting point for a Flutter application.
 
