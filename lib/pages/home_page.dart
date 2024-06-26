@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nestsuche2/Constant/color_constant.dart';
-import 'package:nestsuche2/Controller/home_page_model.dart';
+
+import '../Controller/default_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -57,34 +58,36 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 controller.toggleBuyRent(true);
                               },
-                              child: Obx(() {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                      color: controller.isBuySelected.value
-                                          ? AppColors.primaryColor
-                                              .withOpacity(0.5)
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          color: AppColors.primaryColor)),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 15),
-                                  child: Center(
-                                    child: Text(
-                                      'Buy',
-                                      style: GoogleFonts.libreBaskerville(
-                                        textStyle: TextStyle(
-                                            color:
-                                                controller.isBuySelected.value
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
+                              child: Obx(
+                                () {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: controller.isBuySelected.value
+                                            ? AppColors.primaryColor
+                                                .withOpacity(0.5)
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: AppColors.primaryColor)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    child: Center(
+                                      child: Text(
+                                        'Buy',
+                                        style: GoogleFonts.libreBaskerville(
+                                          textStyle: TextStyle(
+                                              color:
+                                                  controller.isBuySelected.value
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           const SizedBox(width: 0.5),

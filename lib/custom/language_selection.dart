@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:nestsuche2/Constant/color_constant.dart';
-import 'package:nestsuche2/Controller/language_controller.dart';
 import 'package:nestsuche2/Localization/locales.dart';
+
+import '../Controller/default_controller.dart';
 
 class LanguageSelection extends StatefulWidget {
   const LanguageSelection({super.key});
